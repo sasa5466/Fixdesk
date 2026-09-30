@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Вход в систему FixDesk</h4>
+            </div>
+            <div class="card-body">
+                <form action="/login" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Выберите тестовый аккаунт:</label>
+                        <select name="user_id" class="form-select" required>
+                            {% for u in users %}
+                            <option value="{{ u.id }}">{{ u.full_name }} — {{ u.role.value }} ({{ u.email }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Войти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

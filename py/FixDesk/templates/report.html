@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Отчет по заявкам и срокам</h2>
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm border-primary">
+            <div class="card-body">
+                <h1 class="display-4 text-primary">{{ total_tickets }}</h1>
+                <p class="text-muted mb-0">Всего заявок</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm border-warning">
+            <div class="card-body">
+                <h1 class="display-4 text-warning">{{ open_tickets }}</h1>
+                <p class="text-muted mb-0">В работе / Активные</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm border-success">
+            <div class="card-body">
+                <h1 class="display-4 text-success">{{ resolved_count }}</h1>
+                <p class="text-muted mb-0">Решено / Закрыто</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center shadow-sm border-info">
+            <div class="card-body">
+                <h1 class="display-4 text-info">{{ avg_time_hours }}</h1>
+                <p class="text-muted mb-0">Среднее время решения (часов)</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

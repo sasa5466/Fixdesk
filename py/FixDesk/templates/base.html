@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixDesk — Колледж</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/tickets"> FixDesk</a>
+            {% if user %}
+            <div class="navbar-nav me-auto">
+                <a class="nav-link" href="/tickets">Все заявки</a>
+                {% if user.role.value == 'applicant' %}
+                <a class="nav-link" href="/tickets/create">+ Новая заявка</a>
+                {% endif %}
+                {% if user.role.value in ['dispatcher', 'admin'] %}
+                <a class="nav-link" href="/report">Отчеты</a>
+                {% endif %}
+            </div>
+            <div class="d-flex align-items-center text-white">
+                <span class="me-3"><strong>{{ user.full_name }}</strong> ({{ user.role.value }})</span>
+                <a href="/logout" class="btn btn-outline-light btn-sm">Выход</a>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

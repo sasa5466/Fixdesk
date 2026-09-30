@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Заявки на ремонт</h2>
+    {% if user.role.value == 'applicant' %}
+    <a href="/tickets/create" class="btn btn-success">+ Создать заявку</a>
+    {% endif %}
+</div>
+
+<!-- Панель поиска и фильтрации -->
+<form method="get" class="card card-body mb-4 bg-white shadow-sm">
+    <div class="row g-2">
+        <div class="col-md-3">
+            <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Поиск по названию/тексту...">
+        </div>
+        <div class="col-md-3">
+            <select name="category_id" class="form-select">
+                <option value="">Все категории</option>
+                {% for c in categories %}
+                <option value="{{ c.id }}" {% if selected_category == c.id %}selected{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="priority" class="form-select">
+                <option value="">Все приоритеты</option>
+                <option value="low" {% if selected_priority == 'low' %}selected{% endif %}>Низкий</option>
+                <option value="medium" {% if selected_priority == 'medium' %}selected{% endif %}>Средний</option>
+                <option value="high" {% if selected_priority == 'high' %}selected{% endif %}>Высокий</option>
+                <option value="critical" {% if selected_priority == 'critical' %}selected{% endif %}>Критический</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="status_filter" class="form-select">
+                <option value="">Все статусы</option>
+                <option value="new" {% if selected_status == 'new' %}selected{% endif %}>Новая</option>
+                <option value="assigned" {% if selected_status == 'assigned' %}selected{% endif %}>Назначена</option>
+                <option value="in_progress" {% if selected_status == 'in_progress' %}selected{% endif %}>В работе</option>
+                <option value="resolved" {% if selected_status == 'resolved' %}selected{% endif %}>Решена</option>
+                <option value="closed" {% if selected_status == 'closed' %}selected{% endif %}>Закрыта</option>
+                <option value="rejected" {% if selected_status == 'rejected' %}selected{% endif %}>Отклонена</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Найти</button>
+        </div>
+    </div>
+</form>
+
+<div class="table-responsive bg-white shadow-sm rounded">
+    <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Тема</th>
+                <th>Кабинет</th>
+                <th>Категория</th>
+                <th>Приоритет</th>
+                <th>Статус</th>
+                <th>Исполнитель</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in tickets %}
+            <tr>
+                <td><strong>#{{ t.id }}</strong></td>
+                <td><a href="/tickets/{{ t.id }}" class="text-decoration-none fw-bold">{{ t.title }}</a></td>
+                <td>{{ t.location.building }}, каб. {{ t.location.room }}</td>
+                <td>{{ t.category.name }}</td>
+                <td><span class="badge bg-secondary">{{ t.priority.value }}</span></td>
+                <td>
+                    <span class="badge 
+                        {% if t.status.value == 'new' %}bg-info
+                        {% elif t.status.value == 'in_progress' %}bg-warning text-dark
+                        {% elif t.status.value == 'resolved' %}bg-primary
+                        {% elif t.status.value == 'closed' %}bg-success
+                        {% else %}bg-danger{% endif %}">
+                        {{ t.status.value }}
+                    </span>
+                </td>
+                <td>{{ t.assignee.full_name if t.assignee else '—' }}</td>
+                <td><a href="/tickets/{{ t.id }}" class="btn btn-sm btn-outline-primary">Открыть</a></td>
+            </tr>
+            {% else %}
+            <tr><td colspan="8" class="text-center py-4 text-muted">Заявки не найдены</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

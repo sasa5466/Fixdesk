@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Создание заявки на ремонт</h4>
+            </div>
+            <div class="card-body">
+                <form action="/tickets" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Тема обращения</label>
+                        <input type="text" name="title" class="form-control" placeholder="Сломался проектор" required>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Кабинет / Помещение</label>
+                            <select name="location_id" class="form-select" required>
+                                {% for l in locations %}
+                                <option value="{{ l.id }}">{{ l.building }}, каб. {{ l.room }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Категория</label>
+                            <select name="category_id" class="form-select" required>
+                                {% for c in categories %}
+                                <option value="{{ c.id }}">{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Подробное описание проблемы</label>
+                        <textarea name="description" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Приоритет</label>
+                        <select name="priority" class="form-select">
+                            <option value="low">Низкий</option>
+                            <option value="medium" selected>Средний</option>
+                            <option value="high">Высокий</option>
+                            <option value="critical">Критический</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Фотографии (не более 3 шт.)</label>
+                        <input type="file" name="photos" class="form-control" multiple accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Отправить заявку</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
